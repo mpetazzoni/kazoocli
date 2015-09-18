@@ -155,11 +155,11 @@ class KazooCli(object):
         try:
             version = '.'.join(map(str, self._zk.server_version()))
             state = self._zk.command('ruok')
+            print('{}; server {} has version {} and reports {}.'
+                  .format(self._zk.state.title(), self._server, version,
+                          state))
         except:
-            version = 'n/a'
-
-        print('{}; server {} has version {} and reports {}.'
-              .format(self._zk.state.title(), self._server, version, state))
+            print('State unknown; disconnected?')
 
     def _fmt_time(self, ts=None):
         ts = (ts / 1000.0) if ts else time.time()
