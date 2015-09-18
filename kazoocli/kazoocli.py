@@ -47,8 +47,9 @@ class KazooCli(object):
     """
 
     _DEFAULT_ZOOKEEPER_PORT = 2181
+    _DEFAULT_CONNECTION_TIMEOUT = 3
 
-    def __init__(self, server):
+    def __init__(self, server, timeout=_DEFAULT_CONNECTION_TIMEOUT):
         self._path = '/'
         self._zk = None
 
@@ -65,7 +66,7 @@ class KazooCli(object):
             pass
 
         self._commands = set([c for c in dir(self) if not c.startswith('_')])
-        self.connect(server)
+        self.connect(server, timeout)
         self._serve()
 
     def _fix_server_uri(self, uri):
@@ -125,7 +126,7 @@ class KazooCli(object):
 
             print(': {}'.format(doc.splitlines()[0]))
 
-    def connect(self, server=None):
+    def connect(self, server=None, timeout=_DEFAULT_CONNECTION_TIMEOUT):
         """Connect to the current server, or to a new server."""
         server = self._fix_server_uri(server) if server else self._server
         if self._zk and self._zk.connected and server == self._server:
@@ -135,8 +136,10 @@ class KazooCli(object):
         self.disconnect()
 
         self._server = server
-        print('Connecting to {}...'.format(self._server))
-        self._zk = kazoo.client.KazooClient(hosts=self._server, timeout=3)
+        print('Connecting to {} (timeout: {}s)...'
+              .format(self._server, timeout))
+        self._zk = kazoo.client.KazooClient(hosts=self._server,
+                                            timeout=timeout)
         self._zk.start()
         self.state()
 

@@ -18,11 +18,13 @@ def main(args=None):
     parser.add_argument('-D', '--debug', action='store_const',
                         const=logging.DEBUG, default=logging.ERROR,
                         help='Enable debug logging of Kazoo')
+    parser.add_argument('-t', '--timeout', default=3, type=int,
+                        help='Set connection timeout (default: 3 seconds)')
     options = parser.parse_args(args=args)
 
     logging.basicConfig(stream=sys.stderr, level=options.debug)
     try:
-        kazoocli.KazooCli(options.server)
+        kazoocli.KazooCli(options.server, options.timeout)
         return 0
     except:
         if options.debug == logging.DEBUG:
