@@ -70,17 +70,34 @@ class KazooCli(object):
         self._serve()
 
     def _fix_server_uri(self, uri):
-        """Ensures that the given server URI contains a port number."""
-        details = uri.split(':')
-        if not uri or not details or len(details) > 2:
+        """Ensure that all hosts in the server string contain a port number."""
+        hosts_path = uri.split('/')
+        if len(hosts_path) > 2:
             raise ValueError('Invalid ZooKeeper server URI: {}'.format(uri))
 
+        servers = hosts_path[0]
+        hosts = []
+        for host in servers.split(','):
+            fixed_host = self._fix_server(host)
+            if fixed_host:
+                hosts.append(fixed_host)
+        chroot_path = '/' + hosts_path[1] if len(hosts_path) > 1 else ''
+        return '{}{}'.format(','.join(hosts), chroot_path)
+
+    def _fix_server(self, host):
+        """Ensures that the given host contains a port number."""
+        if not host:
+            return None
+        details = host.split(':')
+        if len(details) > 2:
+            raise ValueError('Invalid ZooKeeper server URI: {}'.format(host))
+
         if len(details) == 1:
-            return '{}:{}'.format(uri, KazooCli._DEFAULT_ZOOKEEPER_PORT)
+            return '{}:{}'.format(host, KazooCli._DEFAULT_ZOOKEEPER_PORT)
 
         try:
             int(details[1])
-            return uri
+            return host
         except:
             raise ValueError(('Invalid ZooKeeper server port {}; '
                               'expected port number').format(details[1]))
