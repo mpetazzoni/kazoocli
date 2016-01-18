@@ -8,7 +8,7 @@ the zNode tree.
 ## Installation
 
 ```
-$ pip install --upgrade https://github.com/mpetazzoni/kazoocli
+$ pip install --upgrade git+https://github.com/mpetazzoni/kazoocli
 ```
 
 ## Usage
