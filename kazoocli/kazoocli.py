@@ -171,7 +171,7 @@ class KazooCli(object):
         """Show the current connection state."""
         try:
             version = '.'.join(map(str, self._zk.server_version()))
-            state = self._zk.command('ruok')
+            state = self._zk.command(b'ruok')
             print('{}; server {} has version {} and reports {}.'
                   .format(self._zk.state.title(), self._server, version,
                           state))
@@ -326,7 +326,7 @@ class KazooCli(object):
         self.connect()
         while not self._stop:
             try:
-                command = raw_input('{}> '.format(self._path)).strip()
+                command = input('{}> '.format(self._path)).strip()
             except (EOFError, KeyboardInterrupt):
                 print()
                 break
@@ -347,6 +347,6 @@ class KazooCli(object):
 
             try:
                 getattr(self, verb)(*tokens)
-            except Exception, e:
+            except Exception as e:
                 print('Error: {}'.format(e))
         self.disconnect()
