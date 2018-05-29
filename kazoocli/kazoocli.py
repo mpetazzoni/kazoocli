@@ -263,7 +263,7 @@ class KazooCli(object):
             except:
                 pass
 
-        print(data)
+        print(data.decode('utf-8'))
 
     cat = get
 
