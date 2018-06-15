@@ -15,6 +15,7 @@ import pytz
 import readline
 import shlex
 import time
+from six.moves import input
 
 
 class Completer(object):
