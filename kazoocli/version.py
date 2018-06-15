@@ -2,4 +2,4 @@
 
 name = 'kazoocli'
 description = 'KazooCli, a ZooKeeper command-line client'
-version = '1.0'
+version = '1.1'

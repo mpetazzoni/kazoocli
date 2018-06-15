@@ -51,3 +51,8 @@ created : Thu May 21 22:11:21 2015 UTC
 modified: Thu May 21 22:11:21 2015 UTC
 children: 1
 ```
+
+## JSON values
+
+Kazoocli automatically recognizes JSON dictionary values and
+pretty-prints them (in particular, by sorting the keys).
