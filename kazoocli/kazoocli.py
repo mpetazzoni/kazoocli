@@ -284,6 +284,7 @@ class KazooCli(object):
         Usage: set <path> <value>"""
         self.connect()
         path = self._get_path(path)
+        value = value.encode('utf-8')
 
         if not self._zk.exists(path):
             self._zk.create(path, value)
