@@ -54,5 +54,24 @@ children: 1
 
 ## JSON values
 
-Kazoocli automatically recognizes JSON dictionary values and
-pretty-prints them (in particular, by sorting the keys).
+Kazoocli automatically recognizes JSON dictionary values and can
+pretty-print them. By default, `get` will display a compact JSON
+representation. Passing a non-empty second argument to `get` will make
+it pretty-print with indentation. Alternatively, `pget` will default to
+pretty-printing. Both commands always sort the keys alphabetically.
+
+```
+/> set test '{"foo":"bar","animal":"dog"}'
+/> get test
+{"animal":"dog","foo":"bar"}
+/> get test true
+{
+  "animal": "dog",
+  "foo": "bar"
+}
+/> pget test
+{
+  "animal": "dog",
+  "foo": "bar"
+}
+```
