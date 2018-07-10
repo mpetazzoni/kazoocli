@@ -249,7 +249,7 @@ class KazooCli(object):
                   .format(stat.data_length,
                           's' if stat.data_length != 1 else ''))
 
-    def get(self, path=None):
+    def get(self, path, pretty=False):
         """Display the contents of a zNode."""
         self.connect()
         path, stat = self._check_path(path)
@@ -257,16 +257,24 @@ class KazooCli(object):
             return
 
         data, _ = self._zk.get(path)
+        data = data.decode('utf-8')
         if data[0] == '{':
             try:
-                print(json.dumps(json.loads(data), sort_keys=True))
+                indent = 2 if pretty else None
+                print(json.dumps(json.loads(data), sort_keys=True,
+                                 indent=indent))
                 return
             except:
                 pass
 
-        print(data.decode('utf-8'))
+        print(data)
 
     cat = get
+
+    def pget(self, path):
+        """Display the contents of a zNode, defaulting to pretty-printing JSON
+        contents when found."""
+        self.get(path, True)
 
     def hex(self, path=None):
         """Display the contents of a zNode as an hexadecimal dump."""
